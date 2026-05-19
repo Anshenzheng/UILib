@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拾光文创美学馆 - 我的·藏珍阁(大画幅版)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;500&family=Noto+Serif+SC:wght@200;300;600&family=Outfit:wght@100;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* 博物馆级别的清冷影青瓷底色 */
+            --bg-master: #f3f7f6;      /* 影青瓷底，自带高级冷光感 */
+            --ink-deep: #121a21;       /* 黛黑 */
+            --gold-leaf: #bda27e;      /* 极其柔和的哑光沙金 */
+            --text-ghost: #8fa0a8;     /* 烟雨冷灰 */
+            --panel-white: #ffffff;    /* 骨瓷白 */
+            --accent-soft: rgba(189, 162, 126, 0.06);
+            --transition-fluid: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', 'Noto Serif SC', serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #e2e8f0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 手机框架 */
+        .app-container {
+            width: 100%;
+            max-width: 412px;
+            height: 844px;
+            background-color: var(--bg-master);
+            border-radius: 40px;
+            box-shadow: 0 50px 120px rgba(18, 26, 33, 0.1);
+            position: relative;
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+            border: 8px solid #121a21;
+            transform: translateZ(0);
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            padding: 0 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--ink-deep);
+            opacity: 0.6;
+            z-index: 30;
+            letter-spacing: 0.5px;
+        }
+
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 100px; 
+            scrollbar-width: none;
+        }
+        .scroll-content::-webkit-scrollbar { display: none; }
+
+        /* --- 顶栏 --- */
+        .art-header {
+            padding: 24px 28px 12px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .art-header span {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            color: var(--gold-leaf);
+            letter-spacing: 3px;
+        }
+        .art-header i {
+            font-size: 16px;
+            color: var(--ink-deep);
+            opacity: 0.6;
+            cursor: pointer;
+            transition: var(--transition-fluid);
+        }
+
+        /* --- 个人印记 --- */
+        .profile-section {
+            padding: 16px 28px 24px 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .profile-avatar-shard {
+            width: 64px;
+            height: 64px;
+            background-color: var(--panel-white);
+            border-radius: 60% 40% 40% 60% / 50% 60% 40% 50%;
+            padding: 2px;
+            border: 1px solid rgba(189, 162, 126, 0.25);
+            flex-shrink: 0;
+        }
+
+        .profile-avatar-shard img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 60% 40% 40% 60% / 50% 60% 40% 50%;
+        }
+
+        .profile-info h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--ink-deep);
+            letter-spacing: 2px;
+        }
+
+        .profile-info p {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 11px;
+            color: var(--text-ghost);
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* --- 案头三事 --- */
+        .cabinet-section {
+            padding: 0 28px 24px 28px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .cabinet-box {
+            background-color: var(--panel-white);
+            border-radius: 14px;
+            padding: 14px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.01);
+            cursor: pointer;
+        }
+
+        .cabinet-box .num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--ink-deep);
+        }
+
+        .cabinet-box .label {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 10.5px;
+            color: var(--text-ghost);
+        }
+
+        /* --- 博古珍藏卷轴排版（大画幅优化） --- */
+        .shelf-section {
+            padding: 10px 0 30px 0;
+        }
+
+        .label-ghost {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            color: var(--text-ghost);
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            padding-left: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .label-ghost::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: rgba(18, 26, 33, 0.04);
+        }
+
+        /* 横向划动轨道：优化内衬垫，使滑入边缘时依然带有高奢呼吸感 */
+        .shelf-scroll-container {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding: 5px 28px 24px 28px;
+            scrollbar-width: none;
+        }
+        .shelf-scroll-container::-webkit-scrollbar { display: none; }
+
+        /* 艺术收藏卡片：宽度从240px放大到310px，形成具有绝对视线统治力的大画幅 */
+        .shelf-art-card {
+            flex: 0 0 310px; 
+            background-color: var(--panel-white);
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: 0 16px 48px rgba(18, 26, 33, 0.03);
+            border: 1px solid rgba(189, 162, 126, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: var(--transition-fluid);
+            cursor: pointer;
+        }
+
+        .shelf-art-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 60px rgba(18, 26, 33, 0.06);
+            border-color: rgba(189, 162, 126, 0.3);
+        }
+
+        /* 悬浮展位：高度同步扩大到270px，充分展露细节 */
+        .card-display-area {
+            width: 100%;
+            height: 270px; 
+            background-color: #f7faf9;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-display-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-fluid);
+        }
+        .shelf-art-card:hover .card-display-area img {
+            transform: scale(1.03);
+        }
+
+        /* 古法玺印章 */
+        .seal-stamp {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background-color: rgba(189, 162, 126, 0.92);
+            color: var(--panel-white);
+            font-size: 10px;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 10px rgba(189, 162, 126, 0.2);
+        }
+
+        /* 卡片底部名帖信息 */
+        .card-inscription {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 4px;
+        }
+
+        .inscription-left {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .inscription-left h4 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px; /* 字体略微放大，匹配大卡片的体量 */
+            font-weight: 600;
+            color: var(--ink-deep);
+            letter-spacing: 0.5px;
+        }
+
+        .inscription-left span {
+            font-size: 11.5px;
+            color: var(--text-ghost);
+        }
+
+        .inscription-right-index {
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            color: var(--gold-leaf);
+            font-weight: 300;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(189, 162, 126, 0.4);
+            padding-bottom: 2px;
+        }
+
+        /* --- 极致底栏 --- */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 76px;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 12px;
+            z-index: 20;
+            border-bottom-left-radius: 32px;
+            border-bottom-right-radius: 32px;
+            border-top: 1px solid rgba(18, 26, 33, 0.03);
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-ghost);
+            font-size: 10px;
+            gap: 5px;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
+        .nav-link i { font-size: 17px; color: var(--text-ghost); }
+
+        .nav-link.active {
+            color: var(--ink-deep);
+            font-weight: 600;
+            opacity: 1;
+        }
+        .nav-link.active i { color: var(--ink-deep); }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div class="status-bar">
+            <span>09:41</span>
+            <div style="display: flex; gap: 8px; align-items: center; opacity: 0.4;">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-three-quarters"></i>
+            </div>
+        </div>
+
+        <div class="scroll-content">
+            
+            <div class="art-header">
+                <span>MY CABINET</span>
+                <i class="fas fa-cog" title="阁内考校"></i>
+            </div>
+
+            <div class="profile-section">
+                <div class="profile-avatar-shard">
+                    <img src="https://gw.alicdn.com/bao/uploaded/i2/3255668163/O1CN01R43weE2AAi7xjo8Gk_!!3255668163.jpg" alt="主奉">
+                </div>
+                <div class="profile-info">
+                    <h2>林泉高致</h2>
+                    <p>落款：平生一负，唯钟山水器物。</p>
+                </div>
+            </div>
+
+            <div class="cabinet-section">
+                <div class="cabinet-box">
+                    <span class="num">12</span>
+                    <span class="label">阁中藏珍</span>
+                </div>
+                <div class="cabinet-box">
+                    <span class="num">47</span>
+                    <span class="label">拾光印记</span>
+                </div>
+                <div class="cabinet-box">
+                    <span class="num">5</span>
+                    <span class="label">鸣鸾尺素</span>
+                </div>
+            </div>
+
+            <div class="shelf-section">
+                <div class="label-ghost">COLLECTION / 博古手卷</div>
+                
+                <div class="shelf-scroll-container">
+                    
+                    <div class="shelf-art-card">
+                        <div class="card-display-area">
+                            <img src="https://gw.alicdn.com/bao/uploaded/i3/2219000763722/O1CN01FUAG211dMjFsjdiiA_!!2219000763722.jpg" alt="藏品">
+                            <div class="seal-stamp">已鉴 · 入阁</div>
+                        </div>
+                        <div class="card-inscription">
+                            <div class="inscription-left">
+                                <h4>千里江山 · 丝绸画卷</h4>
+                                <span>编号 #0921 / 限定复刻馆藏</span>
+                            </div>
+                            <div class="inscription-right-index">壹</div>
+                        </div>
+                    </div>
+
+                    <div class="shelf-art-card">
+                        <div class="card-display-area">
+                            <img src="https://gw.alicdn.com/imgextra/i3/2668281278/O1CN01lI85nb1LJN9hL7Gyq_!!2668281278.jpg" alt="藏品">
+                            <div class="seal-stamp">随身 · 赏玩</div>
+                        </div>
+                        <div class="card-inscription">
+                            <div class="inscription-left">
+                                <h4>微雨宣纸活页本</h4>
+                                <span>文房雅玩 / 素笺留白</span>
+                            </div>
+                            <div class="inscription-right-index">贰</div>
+                        </div>
+                    </div>
+
+                    <div class="shelf-art-card">
+                        <div class="card-display-area">
+                            <img src="https://gw.alicdn.com/bao/uploaded/i4/3539971742/O1CN01RrO0M01OjssRDnMTi_!!3539971742.jpg" alt="藏品">
+                            <div class="seal-stamp">孤品 · 传笺</div>
+                        </div>
+                        <div class="card-inscription">
+                            <div class="inscription-left">
+                                <h4>掐丝珐琅瑞兽坠</h4>
+                                <span>宫廷非遗 / 专属佩饰</span>
+                            </div>
+                            <div class="inscription-right-index">叁</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-link">
+                <i class="fas fa-store"></i>
+                <span>小店</span>
+            </div>
+            <div class="nav-link">
+                <i class="fas fa-compass"></i>
+                <span>发现</span>
+            </div>
+            <div class="nav-link">
+                <i class="fas fa-comment-dots"></i>
+                <span>知音</span>
+            </div>
+            <div class="nav-link active">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
