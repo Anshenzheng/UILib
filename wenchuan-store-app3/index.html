@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拾光文创美学馆 - 纯粹知音空间</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;500&family=Noto+Serif+SC:wght@200;300;600&family=Outfit:wght@100;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* 博物馆级别的清冷影青瓷底色 */
+            --bg-master: #f3f7f6;      /* 影青瓷底，自带高级冷光感 */
+            --ink-deep: #121a21;       /* 黛黑 */
+            --gold-leaf: #bda27e;      /* 极其柔和的哑光沙金 */
+            --text-ghost: #8fa0a8;     /* 烟雨冷灰 */
+            --panel-white: #ffffff;    /* 骨瓷白 */
+            --accent-soft: rgba(189, 162, 126, 0.06);
+            --transition-fluid: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', 'Noto Serif SC', serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #e2e8f0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 手机框架 */
+        .app-container {
+            width: 100%;
+            max-width: 412px;
+            height: 844px;
+            background-color: var(--bg-master);
+            border-radius: 40px;
+            box-shadow: 0 50px 120px rgba(18, 26, 33, 0.1);
+            position: relative;
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+            border: 8px solid #121a21;
+            transform: translateZ(0);
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            padding: 0 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--ink-deep);
+            opacity: 0.6;
+            z-index: 30;
+            letter-spacing: 0.5px;
+        }
+
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 100px; 
+            scrollbar-width: none;
+        }
+        .scroll-content::-webkit-scrollbar { display: none; }
+
+        /* --- 顶栏：极其空灵的留白大字流 --- */
+        .art-header {
+            padding: 24px 28px 12px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .art-title-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .art-title-group h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 26px;
+            font-weight: 200;
+            color: var(--ink-deep);
+            letter-spacing: 4px;
+            line-height: 1.2;
+        }
+
+        .art-title-group span {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            color: var(--gold-leaf);
+            letter-spacing: 4px;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        .art-header-icons {
+            display: flex;
+            gap: 24px;
+            padding-top: 6px;
+        }
+        .art-header-icons i {
+            font-size: 16px;
+            color: var(--ink-deep);
+            opacity: 0.6;
+            cursor: pointer;
+            transition: var(--transition-fluid);
+        }
+        .art-header-icons i:hover { opacity: 1; color: var(--gold-leaf); }
+
+        /* --- 模块一：曲水流觞（中式微缩园林窗扉质感） --- */
+        .garden-section {
+            padding: 20px 0 20px 28px;
+        }
+
+        .label-ghost {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            color: var(--text-ghost);
+            letter-spacing: 3px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .label-ghost::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: rgba(18, 26, 33, 0.04);
+        }
+
+        .garden-track {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-right: 28px;
+            scrollbar-width: none;
+        }
+        .garden-track::-webkit-scrollbar { display: none; }
+
+        .garden-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        /* 涟漪意境：头像采用不对称海棠窗切片或碎玉形态 */
+        .shard-avatar {
+            width: 52px;
+            height: 52px;
+            background-color: var(--panel-white);
+            border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%; /* 有机无规则弧形，彻底打破平庸 */
+            padding: 2px;
+            border: 1px solid rgba(18, 26, 33, 0.06);
+            transition: var(--transition-fluid);
+            position: relative;
+        }
+
+        .garden-node.active .shard-avatar {
+            border-color: var(--gold-leaf);
+            box-shadow: 0 8px 20px rgba(189, 162, 126, 0.12);
+            transform: scale(1.03);
+        }
+
+        .shard-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+        }
+
+        /* 呼吸感在线小金点 */
+        .shard-avatar::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--gold-leaf);
+            border-radius: 50%;
+            border: 2px solid var(--bg-master);
+            opacity: 0;
+            transition: var(--transition-fluid);
+        }
+        .garden-node.active .shard-avatar::after { opacity: 1; }
+
+        .node-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 11px;
+            color: var(--ink-deep);
+            letter-spacing: 0.5px;
+            opacity: 0.8;
+        }
+
+        /* --- 模块二：鸣鸾展笺（完全独立于主页的艺术信札布局） --- */
+        .scroll-section {
+            padding: 10px 28px 30px 28px;
+        }
+
+        .zhanjian-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* 展笺卡片：温润的宣纸触感，带有极轻的悬浮和微弱的错落感 */
+        .zhanjian-card {
+            background-color: var(--panel-white);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            box-shadow: 0 10px 40px rgba(18, 26, 33, 0.01);
+            border: 1px solid rgba(0, 0, 0, 0.01);
+            transition: var(--transition-fluid);
+        }
+
+        .zhanjian-card:hover {
+            transform: translateX(4px);
+            border-color: rgba(189, 162, 126, 0.15);
+        }
+
+        /* 未读展笺：代表信件被蜡印封存，等待启阅 */
+        .zhanjian-card.new-pulse {
+            background: linear-gradient(180deg, #ffffff, #f4f8f7);
+            border-left: 2px solid var(--gold-leaf);
+        }
+
+        .card-left-shard {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(189, 162, 126, 0.15);
+            flex-shrink: 0;
+        }
+        .card-left-shard img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-right-flow {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .flow-top-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .meta-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ink-deep);
+            letter-spacing: 0.5px;
+        }
+
+        .meta-time {
+            font-size: 10px;
+            color: var(--text-ghost);
+            font-weight: 300;
+        }
+
+        .flow-preview-text {
+            font-size: 12.5px;
+            color: var(--text-ghost);
+            line-height: 1.5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: 0.3px;
+        }
+
+        .new-pulse .flow-preview-text {
+            color: var(--ink-deep);
+            font-weight: 400;
+        }
+
+        /* 古法沙金小玺印（取代庸俗的未读红点数字） */
+        .seal-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--gold-leaf);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--gold-leaf);
+            align-self: center;
+            margin-left: 6px;
+        }
+
+        /* --- 极致底栏：全面屏悬浮呼吸感 --- */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 76px;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 12px;
+            z-index: 20;
+            border-bottom-left-radius: 32px;
+            border-bottom-right-radius: 32px;
+            border-top: 1px solid rgba(18, 26, 33, 0.03);
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-ghost);
+            font-size: 10px;
+            gap: 5px;
+            transition: var(--transition-fluid);
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
+        .nav-link i { font-size: 17px; color: var(--text-ghost); transition: var(--transition-fluid); }
+
+        .nav-link.active {
+            color: var(--ink-deep);
+            font-weight: 600;
+            opacity: 1;
+        }
+        .nav-link.active i {
+            color: var(--ink-deep);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div class="status-bar">
+            <span>09:41</span>
+            <div style="display: flex; gap: 8px; align-items: center; opacity: 0.4;">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-three-quarters"></i>
+            </div>
+        </div>
+
+        <div class="scroll-content">
+            
+            <div class="art-header">
+                <div class="art-title-group">
+                    <h1>知音</h1>
+                    <span>Echoes of Mind</span>
+                </div>
+                <div class="art-header-icons">
+                    <i class="fas fa-search" title="寻觅知己"></i>
+                    <i class="fas fa-pen-nib" title="寄出纸笺"></i>
+                </div>
+            </div>
+
+            <div class="garden-section">
+                <div class="label-ghost">GARDEN / 曲水流觞</div>
+                <div class="garden-track">
+                    
+                    <div class="garden-node active">
+                        <div class="shard-avatar">
+                            <img src="https://gw.alicdn.com/bao/uploaded/i2/3255668163/O1CN01R43weE2AAi7xjo8Gk_!!3255668163.jpg" alt="雅友">
+                        </div>
+                        <span class="node-name">林泉高致</span>
+                    </div>
+
+                    <div class="garden-node active">
+                        <div class="shard-avatar">
+                            <img src="https://gw.alicdn.com/bao/uploaded/i3/2219000763722/O1CN01FUAG211dMjFsjdiiA_!!2219000763722.jpg" alt="雅友">
+                        </div>
+                        <span class="node-name">墨染青衣</span>
+                    </div>
+
+                    <div class="garden-node active">
+                        <div class="shard-avatar">
+                            <img src="https://gw.alicdn.com/imgextra/i3/2668281278/O1CN01lI85nb1LJN9hL7Gyq_!!2668281278.jpg" alt="雅友">
+                        </div>
+                        <span class="node-name">半扎马尾</span>
+                    </div>
+
+                    <div class="garden-node">
+                        <div class="shard-avatar">
+                            <img src="https://gw.alicdn.com/bao/uploaded/i4/3539971742/O1CN01RrO0M01OjssRDnMTi_!!3539971742.jpg" alt="雅友">
+                        </div>
+                        <span class="node-name">未央</span>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="scroll-section">
+                <div class="label-ghost">LETTERS / 鸣鸾展笺</div>
+                <div class="zhanjian-list">
+                    
+                    <div class="zhanjian-card new-pulse">
+                        <div class="card-left-shard">
+                            <img src="https://gw.alicdn.com/bao/uploaded/i2/3255668163/O1CN01R43weE2AAi7xjo8Gk_!!3255668163.jpg" alt="雅友">
+                        </div>
+                        <div class="card-right-flow">
+                            <div class="flow-top-meta">
+                                <span class="meta-name">林泉高致</span>
+                                <span class="meta-time">未申刻</span>
+                            </div>
+                            <div class="flow-preview-text">兄台，前日所聊的「千里江山」复刻画卷，底料是苏绣真丝吗？</div>
+                        </div>
+                        <div class="seal-dot"></div>
+                    </div>
+
+                    <div class="zhanjian-card new-pulse">
+                        <div class="card-left-shard">
+                            <img src="https://gw.alicdn.com/imgextra/i3/2668281278/O1CN01lI85nb1LJN9hL7Gyq_!!2668281278.jpg" alt="雅友">
+                        </div>
+                        <div class="card-right-flow">
+                            <div class="flow-top-meta">
+                                <span class="meta-name">半扎马尾</span>
+                                <span class="meta-time">晨起</span>
+                            </div>
+                            <div class="flow-preview-text">收到那枚掐丝珐琅坠子了，日常搭配素色衣裳特别沉静，多谢推荐。</div>
+                        </div>
+                        <div class="seal-dot"></div>
+                    </div>
+
+                    <div class="zhanjian-card">
+                        <div class="card-left-shard">
+                            <img src="https://gw.alicdn.com/bao/uploaded/i3/2219000763722/O1CN01FUAG211dMjFsjdiiA_!!2219000763722.jpg" alt="雅友">
+                        </div>
+                        <div class="card-right-flow">
+                            <div class="flow-top-meta">
+                                <span class="meta-name">墨染青衣</span>
+                                <span class="meta-time">昨日</span>
+                            </div>
+                            <div class="flow-preview-text">九色鹿的瑞兽沉香确实高雅，燃尽一缕青烟，满室皆是森林寂静的气息。</div>
+                        </div>
+                    </div>
+
+                    <div class="zhanjian-card">
+                        <div class="card-left-shard">
+                            <img src="https://gw.alicdn.com/bao/uploaded/i4/3539971742/O1CN01RrO0M01OjssRDnMTi_!!3539971742.jpg" alt="雅友">
+                        </div>
+                        <div class="card-right-flow">
+                            <div class="flow-top-meta">
+                                <span class="meta-name">煮茶听雨</span>
+                                <span class="meta-time">三日前</span>
+                            </div>
+                            <div class="flow-preview-text">下周在西湖边有一场孤品漆器特展，手艺人也会到场，可要同去？</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-link">
+                <i class="fas fa-store"></i>
+                <span>小店</span>
+            </div>
+            <div class="nav-link">
+                <i class="fas fa-compass"></i>
+                <span>发现</span>
+            </div>
+            <div class="nav-link active">
+                <i class="fas fa-comment-dots"></i>
+                <span>知音</span>
+            </div>
+            <div class="nav-link">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
